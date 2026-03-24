@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-achivon-primary: #8B0000;
+  --color-achivon-primary-light: #A11212;
+  --color-achivon-bg: #F5F1EB;
+  --color-achivon-card: #FAF7F3;
+  --color-achivon-card-white: #FFFFFF;
+  --color-achivon-text: #2B2B2B;
+  --color-achivon-text-light: #6B6B6B;
+  --color-achivon-text-muted: #9B9B9B;
+  --color-achivon-border: #E8E4DE;
+  --color-achivon-sidebar: #FAF7F3;
+
+  --color-heat-0: #F5F1EB;
+  --color-heat-1: #F2D5D5;
+  --color-heat-2: #E0A0A0;
+  --color-heat-3: #C56060;
+  --color-heat-4: #A11212;
+  --color-heat-5: #8B0000;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-achivon-bg);
+  color: var(--color-achivon-text);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1cdc7;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b0aba5;
+}
+
+/* Smooth transitions for interactive elements */
+.habit-cell {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.habit-cell:hover {
+  transform: scale(1.1);
+}
+
+.habit-cell:active {
+  transform: scale(0.95);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Pulse animation for streak */
+@keyframes streak-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.streak-pulse {
+  animation: streak-pulse 2s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+/* Progress bar animation */
+@keyframes progressFill {
+  from { width: 0; }
+}
+
+.progress-animate {
+  animation: progressFill 1s ease-out forwards;
+}
+
+/* Sidebar active indicator */
+.nav-active::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--color-achivon-primary);
+  border-radius: 3px 0 0 3px;
+}

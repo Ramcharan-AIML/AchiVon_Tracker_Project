@@ -13,6 +13,7 @@ interface UserState {
   initialize: () => void;
   updateUser: (data: Partial<User>) => void;
   addXp: (amount: number) => void;
+  removeXp: (amount: number) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -39,6 +40,14 @@ export const useUserStore = create<UserState>()(
           const newXp = state.xp + amount;
           const newLevel = Math.floor(newXp / 100) + 1;
           return { xp: newXp, level: newLevel, dailyScore: state.dailyScore + amount };
+        });
+      },
+
+      removeXp: (amount) => {
+        set((state) => {
+          const newXp = Math.max(0, state.xp - amount);
+          const newLevel = Math.max(1, Math.floor(newXp / 100) + 1);
+          return { xp: newXp, level: newLevel, dailyScore: Math.max(0, state.dailyScore - amount) };
         });
       },
     }),

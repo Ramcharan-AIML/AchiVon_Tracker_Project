@@ -2,22 +2,34 @@
 
 import { Sparkles, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useHabitStore } from "@/store/habitStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { formatDate } from "@/lib/utils";
 
 export default function DailyCompletion() {
-  const getTodayStats = useHabitStore((s) => s.getTodayStats);
-  const getYesterdayStats = useHabitStore((s) => s.getYesterdayStats);
-  const [stats, setStats] = useState({ completed: 0, total: 0 });
-  const [yesterdayStats, setYesterdayStats] = useState({ completed: 0, total: 0 });
+  const habits = useHabitStore((s) => s.habits);
+  const logs = useHabitStore((s) => s.logs);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setStats(getTodayStats());
-    if (getYesterdayStats) {
-      setYesterdayStats(getYesterdayStats());
-    }
-  }, [getTodayStats, getYesterdayStats]);
+  }, []);
+
+  const today = formatDate(new Date());
+
+  const stats = useMemo(() => {
+    const todayLogs = logs.filter((l) => l.date === today);
+    const completed = todayLogs.filter((l) => l.status === "done").length;
+    return { completed, total: habits.length };
+  }, [habits, logs, today]);
+
+  const yesterdayStats = useMemo(() => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayDate = formatDate(yesterday);
+    const yesterdayLogs = logs.filter((l) => l.date === yesterdayDate);
+    const completed = yesterdayLogs.filter((l) => l.status === "done").length;
+    return { completed, total: habits.length };
+  }, [habits, logs]);
 
   const percent = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
   const yesterdayPercent = yesterdayStats.total > 0 ? Math.round((yesterdayStats.completed / yesterdayStats.total) * 100) : 0;

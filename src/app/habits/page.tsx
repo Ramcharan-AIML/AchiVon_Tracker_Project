@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useHabitStore } from "@/store/habitStore";
 import { getWeekDates, formatDate, cn } from "@/lib/utils";
+import { HabitIcon } from "@/components/ui/HabitIcon";
 import {
   Check,
   Filter,
@@ -14,21 +15,7 @@ import {
   Flame,
 } from "lucide-react";
 
-const CATEGORIES = [
-  "All Habits",
-  "Health & Fitness",
-  "Career Growth",
-  "Learning",
-  "Mindfulness",
-];
-
-const categoryMap: Record<string, string> = {
-  "Health & Fitness": "Health",
-  "Career Growth": "Career",
-  Learning: "Learning",
-  Mindfulness: "Mindfulness",
-};
-
+// categoryMap and CATEGORIES removed; dynamic computation used below.
 const categoryBadge: Record<string, string> = {
   Health: "bg-emerald-50 text-emerald-700 border border-emerald-200",
   Career: "bg-purple-50 text-purple-700 border border-purple-200",
@@ -49,7 +36,9 @@ export default function HabitsPage() {
 
   // Form state
   const [newName, setNewName] = useState("");
-  const [newCategory, setNewCategory] = useState("Health");
+  const [newCategory, setNewCategory] = useState("Health & Fitness");
+  const [isCustomCategory, setIsCustomCategory] = useState(false);
+  const [customCategory, setCustomCategory] = useState("");
   const [newFrequency, setNewFrequency] = useState<"daily" | "weekly" | "custom">("daily");
 
   useEffect(() => {
@@ -60,25 +49,33 @@ export default function HabitsPage() {
   const today = new Date();
   const todayStr = formatDate(today);
 
+  const dynamicCategories = ["All Habits", ...Array.from(new Set(habits.map((h) => h.category)))];
+  const modalCategories = Array.from(new Set(habits.map((h) => h.category)));
+  if (!modalCategories.includes("Health & Fitness")) modalCategories.unshift("Health & Fitness");
+
   const filteredHabits =
     activeCategory === "All Habits"
       ? habits
-      : habits.filter(
-          (h) => h.category === (categoryMap[activeCategory] || activeCategory)
-        );
+      : habits.filter((h) => h.category === activeCategory);
 
   const handleAddHabit = () => {
     if (!newName.trim()) return;
+    
+    const finalCategory = isCustomCategory ? customCategory.trim() : newCategory;
+    if (!finalCategory) return;
+
     addHabit({
       id: `h-${Date.now()}`,
       name: newName.trim(),
-      category: newCategory,
+      category: finalCategory,
       frequency: newFrequency,
       targetCount: 1,
       userId: "user-1",
-      icon: "✨",
+      icon: "Star",
     });
     setNewName("");
+    setCustomCategory("");
+    setIsCustomCategory(false);
     setShowModal(false);
   };
 
@@ -155,8 +152,8 @@ export default function HabitsPage() {
 
       {/* Controls */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-2 overflow-x-auto">
-          {CATEGORIES.map((cat) => (
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-2">
+          {dynamicCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -282,8 +279,10 @@ export default function HabitsPage() {
                   <tr key={habit.id} className="border-t border-achivon-border/50 group">
                     <td className="py-4 pr-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{habit.icon}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-achivon-primary/10 flex items-center justify-center text-achivon-primary shrink-0">
+                            <HabitIcon name={habit.icon} />
+                          </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <p className="text-sm font-semibold text-achivon-text">
@@ -300,12 +299,6 @@ export default function HabitsPage() {
                               <p className="text-[10px] font-semibold text-achivon-text-muted uppercase">
                                 {habit.category}
                               </p>
-                              <div className="w-12 h-1 bg-achivon-bg rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-achivon-primary rounded-full"
-                                  style={{ width: `${Math.min(completionPercent, 100)}%` }}
-                                />
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -463,8 +456,8 @@ export default function HabitsPage() {
                 key={habit.id}
                 className="bg-achivon-card-white rounded-2xl p-5 shadow-sm border border-achivon-border flex items-center gap-4 card-hover"
               >
-                <div className="w-10 h-10 rounded-xl bg-achivon-primary/10 flex items-center justify-center text-xl">
-                  {habit.icon}
+                <div className="w-10 h-10 rounded-xl bg-achivon-primary/10 flex items-center justify-center text-achivon-primary shrink-0">
+                  <HabitIcon name={habit.icon} />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-achivon-text">
@@ -542,18 +535,40 @@ export default function HabitsPage() {
                   Category
                 </label>
                 <select
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-achivon-border bg-achivon-bg text-sm focus:outline-none focus:ring-2 focus:ring-achivon-primary/20"
-                >
-                  {["Health", "Career", "Learning", "Mindfulness", "Self-Care"].map(
-                    (c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    )
+                  value={isCustomCategory ? "Other" : newCategory}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "Other") {
+                      setIsCustomCategory(true);
+                      setNewCategory("Other");
+                    } else {
+                      setIsCustomCategory(false);
+                      setNewCategory(val);
+                    }
+                  }}
+                  className={cn(
+                    "w-full px-3 py-2 rounded-xl border border-achivon-border bg-achivon-bg text-sm focus:outline-none focus:ring-2 focus:ring-achivon-primary/20",
+                    isCustomCategory && "mb-3"
                   )}
+                >
+                  {modalCategories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                  <option value="Other">Other (Custom)</option>
                 </select>
+
+                {isCustomCategory && (
+                  <input
+                    type="text"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    placeholder="Type custom category..."
+                    className="w-full px-3 py-2 rounded-xl border border-achivon-border bg-achivon-bg text-sm focus:outline-none focus:ring-2 focus:ring-achivon-primary/20 animate-in fade-in slide-in-from-top-2"
+                    autoFocus
+                  />
+                )}
               </div>
 
               <div>

@@ -31,7 +31,7 @@ export default function FocusToday() {
 
   const today = formatDate(new Date());
 
-  const tasks: TaskItem[] = habits.slice(0, 5).map((h) => {
+  const tasks: TaskItem[] = habits.map((h) => {
     const log = logs.find((l) => l.habitId === h.id && l.date === today);
     return {
       id: h.id,
@@ -44,10 +44,6 @@ export default function FocusToday() {
   const completedCount = tasks.filter((t) => t.done).length;
   const totalCount = tasks.length;
   const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <div className="bg-achivon-card-white rounded-3xl p-6 shadow-md border border-achivon-border/80 fade-in fade-in-delay-2 h-full flex flex-col">
@@ -65,7 +61,7 @@ export default function FocusToday() {
         />
       </div>
 
-      <div className="space-y-3 flex-1">
+      <div className="space-y-3 flex-1 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
         {tasks.map((task) => (
           <div
             key={task.id}
@@ -79,7 +75,7 @@ export default function FocusToday() {
             }}
           >
             <div
-              className={`relative w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
+              className={`relative w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all duration-300 shrink-0 ${
                 task.done
                   ? "bg-achivon-primary border-achivon-primary scale-95"
                   : "border-achivon-border group-hover:border-achivon-primary/50"
@@ -99,7 +95,7 @@ export default function FocusToday() {
               {task.name}
             </span>
             <span
-              className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md border transition-opacity ${
+              className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md border transition-opacity shrink-0 ${
                 task.done ? "opacity-50" : "opacity-100"
               } ${
                 categoryStyle[task.category] ||

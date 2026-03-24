@@ -53,14 +53,14 @@ export const mockUser: User = {
 };
 
 export const mockHabits: Habit[] = [
-  { id: "h1", name: "Morning HIIT", category: "Health", frequency: "daily", targetCount: 1, userId: "user-1", icon: "🏋️" },
-  { id: "h2", name: "Read 30 Pages", category: "Learning", frequency: "daily", targetCount: 1, userId: "user-1", icon: "📖" },
-  { id: "h3", name: "Side Project Dev", category: "Career", frequency: "daily", targetCount: 1, userId: "user-1", icon: "💻" },
-  { id: "h4", name: "Deep Meditation", category: "Mindfulness", frequency: "daily", targetCount: 1, userId: "user-1", icon: "🧘" },
-  { id: "h5", name: "Hydration (3L)", category: "Health", frequency: "daily", targetCount: 3, userId: "user-1", icon: "💧" },
-  { id: "h6", name: "Code Practice", category: "Career", frequency: "daily", targetCount: 1, userId: "user-1", icon: "⌨️" },
-  { id: "h7", name: "Language Practice: Spanish", category: "Learning", frequency: "custom", targetCount: 1, userId: "user-1", icon: "🌍" },
-  { id: "h8", name: "Morning Skin Routine", category: "Self-Care", frequency: "daily", targetCount: 1, userId: "user-1", icon: "✨" },
+  { id: "h1", name: "Morning HIIT", category: "Health & Fitness", frequency: "daily", targetCount: 1, userId: "user-1", icon: "Dumbbell" },
+  { id: "h2", name: "Read 30 Pages", category: "Learning", frequency: "daily", targetCount: 1, userId: "user-1", icon: "BookOpen" },
+  { id: "h3", name: "Side Project Dev", category: "Career Growth", frequency: "daily", targetCount: 1, userId: "user-1", icon: "Code" },
+  { id: "h4", name: "Deep Meditation", category: "Mindfulness", frequency: "daily", targetCount: 1, userId: "user-1", icon: "Heart" },
+  { id: "h5", name: "Hydration (3L)", category: "Health & Fitness", frequency: "daily", targetCount: 3, userId: "user-1", icon: "Droplets" },
+  { id: "h6", name: "Code Practice", category: "Career Growth", frequency: "daily", targetCount: 1, userId: "user-1", icon: "Terminal" },
+  { id: "h7", name: "Language Practice: Spanish", category: "Learning", frequency: "custom", targetCount: 1, userId: "user-1", icon: "Globe" },
+  { id: "h8", name: "Morning Skin Routine", category: "Self-Care", frequency: "daily", targetCount: 1, userId: "user-1", icon: "Sparkles" },
 ];
 
 function generateHabitLogs(): HabitLog[] {

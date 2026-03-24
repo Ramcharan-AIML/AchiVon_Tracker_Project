@@ -17,6 +17,8 @@ interface HabitState {
   initialized: boolean;
   initialize: () => void;
   addHabit: (habit: Habit) => void;
+  renameHabit: (habitId: string, newName: string) => void;
+  deleteHabit: (habitId: string) => void;
   toggleLog: (habitId: string, date: string) => void;
   getLogsForHabit: (habitId: string) => HabitLog[];
   getLogsForDate: (date: string) => HabitLog[];
@@ -42,6 +44,21 @@ export const useHabitStore = create<HabitState>()(
         set((state) => ({ habits: [...state.habits, habit] }));
       },
 
+      renameHabit: (habitId, newName) => {
+        set((state) => ({
+          habits: state.habits.map((h) =>
+            h.id === habitId ? { ...h, name: newName } : h
+          ),
+        }));
+      },
+
+      deleteHabit: (habitId) => {
+        set((state) => ({
+          habits: state.habits.filter((h) => h.id !== habitId),
+          logs: state.logs.filter((l) => l.habitId !== habitId),
+        }));
+      },
+
       toggleLog: (habitId: string, date: string) => {
         const { logs } = get();
         const existing = logs.find(
@@ -55,6 +72,7 @@ export const useHabitStore = create<HabitState>()(
                 l.id === existing.id ? { ...l, status: "missed" as const } : l
               ),
             });
+            useUserStore.getState().removeXp(20);
           } else {
             set({
               logs: logs.map((l) =>

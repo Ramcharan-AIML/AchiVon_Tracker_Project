@@ -25,7 +25,6 @@ export function HabitIcon({ name, className }: { name: string; className?: strin
     Briefcase,
     Dumbbell
   };
-
   const IconComponent = icons[name] || Star;
   return <IconComponent className={className || "w-5 h-5"} />;
 }

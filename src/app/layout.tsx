@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   description:
     "Track your habits, goals, and daily progress with advanced analytics and visual tracking.",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

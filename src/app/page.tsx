@@ -171,7 +171,6 @@ export default function DashboardPage() {
                   ))}
                 </div>
               </div>
-
               <button
                 onClick={handleAddHabit}
                 className="w-full bg-achivon-primary text-white rounded-xl py-2.5 font-semibold hover:bg-achivon-primary-light transition-colors"

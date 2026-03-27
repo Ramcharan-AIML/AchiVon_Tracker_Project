@@ -139,7 +139,6 @@ export default function DashboardPage() {
                   ))}
                   <option value="Other">Other (Custom)</option>
                 </select>
-
                 {isCustomCategory && (
                   <input
                     type="text"
@@ -151,7 +150,7 @@ export default function DashboardPage() {
                   />
                 )}
               </div>
-
+              
               <div>
                 <label className="text-sm font-medium text-achivon-text block mb-1">
                   Frequency

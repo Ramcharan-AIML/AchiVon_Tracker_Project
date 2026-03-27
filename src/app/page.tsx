@@ -150,7 +150,6 @@ export default function DashboardPage() {
                   />
                 )}
               </div>
-              
               <div>
                 <label className="text-sm font-medium text-achivon-text block mb-1">
                   Frequency
